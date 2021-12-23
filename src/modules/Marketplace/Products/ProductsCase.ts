@@ -18,13 +18,13 @@ import {
 export default class ProductsCase implements UseCase {
   @ExceptionHandler()
   async execute({ headers }: UseCaseParams<ProductsHeaders>) {
-    const { code, category: categoryId } = headers as ProductsHeaders;
+    const { id, code, category: categoryId } = headers as ProductsHeaders;
 
     await createDBConnection();
 
     const ormRepository = getTypeORMConnection().getRepository(Product);
     const result = await ormRepository.find(
-      this.buildSearchProperties(code, categoryId)
+      this.buildSearchProperties(code, categoryId, id)
     );
 
     return HttpResponse.success<ProductsResponse>({
@@ -33,11 +33,12 @@ export default class ProductsCase implements UseCase {
     });
   }
 
-  private buildSearchProperties(code: string, categoryId: string) {
+  private buildSearchProperties(code: string, categoryId: string, id: string) {
     return {
       where: (qb: SelectQueryBuilder<Product>) => {
         qb.leftJoin("Product.category", "category");
         if (code) qb.where("Product.code = :code", { code });
+        if (id) qb.where("Product.id = :id", { id });
         if (categoryId) qb.where("category_id = :categoryId", { categoryId });
       },
       relations: ["category"],
