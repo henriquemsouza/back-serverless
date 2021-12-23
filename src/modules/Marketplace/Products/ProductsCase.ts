@@ -1,21 +1,46 @@
 import { OK } from "http-status";
 import { injectable } from "inversify";
-import { UseCase } from "../../../shared/contracts";
+import { SelectQueryBuilder } from "typeorm";
+import Product from "../../../infra/db/entities/Product";
+import {
+  createDBConnection,
+  getTypeORMConnection,
+} from "../../../infra/db/utils/ConnectionHelper";
+import { UseCase, UseCaseParams } from "../../../shared/contracts";
 import ExceptionHandler from "../../../shared/decorators/ExceptionHandler";
 import HttpResponse from "../../../shared/responses/HttpResponse";
-import { ProductsResponse } from "./interfaces/ProductsInterface";
+import {
+  ProductsHeaders,
+  ProductsResponse,
+} from "./interfaces/ProductsInterface";
 
 @injectable()
 export default class ProductsCase implements UseCase {
   @ExceptionHandler()
-  async execute() {
-    const randomString = `${Math.floor(Math.random() * (10 - 1 + 10))}`;
+  async execute({ headers }: UseCaseParams<ProductsHeaders>) {
+    const { code, category: categoryId } = headers as ProductsHeaders;
+
+    await createDBConnection();
+
+    const ormRepository = getTypeORMConnection().getRepository(Product);
+
+    const result = await ormRepository.find(
+      this.buildSearchProperties(code, categoryId)
+    );
 
     return HttpResponse.success<ProductsResponse>({
-      body: {
-        message: randomString,
-      },
+      body: { products: result },
       statusCode: OK,
     });
+  }
+
+  private buildSearchProperties(code: string, categoryId: string) {
+    return {
+      where: (qb: SelectQueryBuilder<Product>) => {
+        if (code) qb.where("code = :code", { code });
+        if (categoryId)
+          qb.where("category_id = :category_id", { category_id: categoryId });
+      },
+    };
   }
 }

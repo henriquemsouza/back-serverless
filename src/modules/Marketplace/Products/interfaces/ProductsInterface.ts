@@ -1,3 +1,8 @@
+export interface ProductsHeaders {
+  code: string;
+  category: string;
+}
+
 export interface ProductsResponse {
-  message: string;
+  [k: string]: any;
 }
