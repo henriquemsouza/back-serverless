@@ -2,7 +2,7 @@ import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import env from "./src/infra/config/env";
 
 const defaultConfig = {
-  synchronize: false,
+  synchronize: true,
   logging: false,
   entities: ["./src/**/infra/db/entities/*{.ts,.js}"],
   migrations: ["./src/**/infra/db/migrations/**/*{.ts,.js}"],

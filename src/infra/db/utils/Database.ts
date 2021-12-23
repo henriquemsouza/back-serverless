@@ -9,6 +9,8 @@ import {
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import env from "../../config/env";
 import { injectable } from "inversify";
+import Product from "../entities/Product";
+import Category from "../entities/Category";
 
 @injectable()
 export class Database {
@@ -29,7 +31,8 @@ export class Database {
         connection = await connection.connect();
       }
     } else {
-      const connectionOptions: ConnectionOptions = this.buildConnectionOptions(CONNECTION_NAME);
+      const connectionOptions: ConnectionOptions =
+        this.buildConnectionOptions(CONNECTION_NAME);
 
       if (env.db_pass) {
         this.assignPass(connectionOptions);
@@ -52,9 +55,7 @@ export class Database {
       host: env.db_host,
       password: env.db_pass,
       username: env.db_user,
-      entities: [
-        //  TODO ADD entities
-      ],
+      entities: [Category, Product],
       migrations: [__dirname + "/src/infra/infra/db/migrations/*{.ts,.js}"],
       namingStrategy: new SnakeNamingStrategy(),
       cli: {

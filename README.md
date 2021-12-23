@@ -2,6 +2,12 @@
 # Back spa
 
 
+### Initial build with docker
+```sh
+docker-compose up --build
+```
+
+
 ## Install
 ```sh
 yarn

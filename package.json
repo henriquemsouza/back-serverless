@@ -5,13 +5,20 @@
     "main": "src/index.ts",
     "author": "Henrique martins de souza",
     "description": "A basic spa serverless",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/henriquemsouza/back-serverless.git"
+      },
     "scripts": {
         "lint": "eslint src/ --ext .ts",
         "routes": "node -r ts-node/register ./helpers/ShowServerRoutes.ts",
         "clean": "rm -rf dist/ && rm -rf .build/",
         "start:dev": "SLS_DEBUG=* && node --inspect ./node_modules/.bin/sls offline --watch --config serverless-dev.yml -s dev --noPrependStageInUrl",
         "build": "tsc",
-        "build:webpack": "webpack --config webpack.config.js"
+        "build:webpack": "webpack --config webpack.config.js",
+        "migration:up": "yarn typeorm migration:run -c $NODE_ENV",
+        "migration:down": "yarn typeorm migration:revert -c  $NODE_ENV",
+        "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
     },
     "devDependencies": {
         "@types/aws-lambda": "^8.10.84",
