@@ -23,7 +23,6 @@ export default class ProductsCase implements UseCase {
     await createDBConnection();
 
     const ormRepository = getTypeORMConnection().getRepository(Product);
-
     const result = await ormRepository.find(
       this.buildSearchProperties(code, categoryId)
     );
@@ -37,10 +36,11 @@ export default class ProductsCase implements UseCase {
   private buildSearchProperties(code: string, categoryId: string) {
     return {
       where: (qb: SelectQueryBuilder<Product>) => {
-        if (code) qb.where("code = :code", { code });
-        if (categoryId)
-          qb.where("category_id = :category_id", { category_id: categoryId });
+        qb.leftJoin("Product.category", "category");
+        if (code) qb.where("Product.code = :code", { code });
+        if (categoryId) qb.where("category_id = :categoryId", { categoryId });
       },
+      relations: ["category"],
     };
   }
 }

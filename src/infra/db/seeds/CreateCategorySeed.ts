@@ -17,11 +17,15 @@ export default class CreateCategorySeed implements Seeder {
       ])
       .execute();
 
+    const category = (await connection
+      .getRepository(Category)
+      .find()[0]) as Category;
+
     await connection
       .createQueryBuilder()
       .insert()
       .into(Product)
-      .values([{ id: 20, code: "XY20", categoryId: "11", name: "Smartphone" }])
+      .values([{ id: 20, code: "XY20", category, name: "Smartphone" }])
       .execute();
   }
 }

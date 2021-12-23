@@ -2,8 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import Category from "./Category";
 
 @Entity("product")
 class Product {
@@ -16,11 +19,12 @@ class Product {
   @Column()
   name: string;
 
-  @Column()
-  categoryId: string;
-
   @CreateDateColumn()
   createdAt: Date;
+
+  @ManyToOne(() => Category, { nullable: true })
+  @JoinColumn({ name: "category_id" })
+  category: Category;
 }
 
 export default Product;

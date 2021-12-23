@@ -1,6 +1,8 @@
 import { OK } from "http-status";
 import { injectable } from "inversify";
 import Product from "../../../infra/db/entities/Product";
+import Category from "../../../infra/db/entities/Category";
+
 import {
   createDBConnection,
   getTypeORMConnection,
@@ -48,8 +50,17 @@ export default class UpdateProductCase implements UseCase {
       throw new Error("No products were found");
     }
 
+    const categoryRepository = getTypeORMConnection().getRepository(Category);
+    const categories = await categoryRepository.findByIds([categoryId]);
+
+    if (categories.length === 0) {
+      throw new Error("No categories were found");
+    }
+
+    const informedCategory = categories[0];
+
     await ormRepository.update(currentProduct[0].id, {
-      categoryId,
+      category: informedCategory,
       name,
     });
 
@@ -57,6 +68,7 @@ export default class UpdateProductCase implements UseCase {
       where: {
         id,
       },
+      relations: ["category"],
     });
 
     return HttpResponse.success<UpdateProductResponse>({

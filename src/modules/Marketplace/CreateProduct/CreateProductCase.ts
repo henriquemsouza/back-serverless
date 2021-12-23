@@ -1,4 +1,5 @@
 import { OK } from "http-status";
+import Category from "../../../infra/db/entities/Category";
 import { injectable } from "inversify";
 import Product from "../../../infra/db/entities/Product";
 import {
@@ -50,9 +51,18 @@ export default class CreateProductCase implements UseCase {
   private async createProduct(code: string, categoryId: string, name: string) {
     const ormRepository = getTypeORMConnection().getRepository(Product);
 
+    const categoryRepository = getTypeORMConnection().getRepository(Category);
+    const categories = await categoryRepository.findByIds([categoryId]);
+
+    if (categories.length === 0) {
+      throw new Error("No categories were found");
+    }
+
+    const informedCategory = categories[0];
+
     const result = await ormRepository.save({
       code,
-      categoryId,
+      category: informedCategory,
       name,
     });
 
