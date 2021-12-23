@@ -10,33 +10,21 @@ import ExceptionHandler from "../../../shared/decorators/ExceptionHandler";
 import GenericException from "../../../shared/exceptions/GenericException";
 import HttpResponse from "../../../shared/responses/HttpResponse";
 import {
-  CreateProductBody,
-  CreateProductResponse,
-} from "./interfaces/CreateProductsInterface";
+  UpdateProductBody,
+  UpdateProductResponse,
+} from "./interfaces/UpdateProductsInterface";
 
 @injectable()
-export default class CreateProductCase implements UseCase {
+export default class UpdateProductCase implements UseCase {
   @ExceptionHandler()
-  async execute({ body }: UseCaseParams<CreateProductBody>) {
-    const { code, categoryId, name } = body as CreateProductBody;
+  async execute({ body }: UseCaseParams<UpdateProductBody>) {
+    const { id, categoryId, name } = body;
 
     try {
       await createDBConnection();
 
-      return await this.createProduct(code, categoryId, name);
+      return await this.updateProduct(categoryId, name, id);
     } catch (error) {
-      if (
-        `${error}`.includes("duplicate key value violates unique constraint")
-      ) {
-        return HttpResponse.error(
-          new GenericException({
-            name: "BadRequest",
-            statusCode: 500,
-            message:
-              "Error: The code entered has already been used in another product",
-          })
-        );
-      }
       return HttpResponse.error(
         new GenericException({
           name: "BadRequest",
@@ -47,17 +35,32 @@ export default class CreateProductCase implements UseCase {
     }
   }
 
-  private async createProduct(code: string, categoryId: string, name: string) {
+  private async updateProduct(categoryId: string, name: string, id: string) {
     const ormRepository = getTypeORMConnection().getRepository(Product);
 
-    const result = await ormRepository.save({
-      code,
+    const currentProduct = await ormRepository.find({
+      where: {
+        id,
+      },
+    });
+
+    if (currentProduct.length === 0) {
+      throw new Error("No products were found");
+    }
+
+    await ormRepository.update(currentProduct[0].id, {
       categoryId,
       name,
     });
 
-    return HttpResponse.success<CreateProductResponse>({
-      body: result,
+    const updateProduct = await ormRepository.find({
+      where: {
+        id,
+      },
+    });
+
+    return HttpResponse.success<UpdateProductResponse>({
+      body: updateProduct[0],
       statusCode: OK,
     });
   }

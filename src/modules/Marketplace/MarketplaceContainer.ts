@@ -5,6 +5,8 @@ import DeleteProductCase from "./DeleteProduct/DeleteProductCase";
 import DeleteProductRouter from "./DeleteProduct/DeleteProductRouter";
 import ProductsCase from "./Products/ProductsCase";
 import ProductsRouter from "./Products/ProductsRouter";
+import UpdateProductCase from "./UpdateProduct/UpdateProductCase";
+import UpdateProductRouter from "./UpdateProduct/UpdateProductRouter";
 
 const MarketplaceContainer = new ContainerModule((bind) => {
   bind<ProductsCase>(ProductsCase).toSelf();
@@ -13,6 +15,8 @@ const MarketplaceContainer = new ContainerModule((bind) => {
   bind<CreateProductRouter>(CreateProductRouter).toSelf();
   bind<DeleteProductCase>(DeleteProductCase).toSelf();
   bind<DeleteProductRouter>(DeleteProductRouter).toSelf();
+  bind<UpdateProductCase>(UpdateProductCase).toSelf();
+  bind<UpdateProductRouter>(UpdateProductRouter).toSelf();
 });
 
 export default MarketplaceContainer;
