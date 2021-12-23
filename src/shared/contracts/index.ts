@@ -1,6 +1,6 @@
-import { TRestParameters, UnkownParams } from '../types';
-import HttpResponse from '../responses/HttpResponse';
- 
+import { TRestParameters, UnkownParams } from "../types";
+import HttpResponse from "../responses/HttpResponse";
+
 export interface IPaginationRequestParams {
   skip?: number;
   limit?: number;
@@ -14,6 +14,10 @@ export interface UseCaseParams<H = any, B = any, Q = any> {
 
 export interface UseCase {
   execute({ headers, body }: UseCaseParams): Promise<HttpResponse<any>>;
+}
+
+export interface DeleteUseCase {
+  execute(id: string): Promise<HttpResponse<any>>;
 }
 
 export interface DataRepository<T = any> {
@@ -30,7 +34,12 @@ export interface DatabaseConnection {
   disconnect(): Promise<void>;
 }
 
-export interface IHttpRequest<BODY = any, QUERY = any, PARAMS = any, HEADERS = any> {
+export interface IHttpRequest<
+  BODY = any,
+  QUERY = any,
+  PARAMS = any,
+  HEADERS = any
+> {
   body?: BODY;
   query?: QUERY;
   params?: PARAMS;
