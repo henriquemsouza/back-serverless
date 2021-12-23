@@ -1,7 +1,6 @@
 import { inject, injectable } from "inversify";
 import { IHttpRequest, RequestRouter } from "../../../shared/contracts";
 
-import { UpdateProductBody } from "./interfaces/UpdateProductsInterface";
 import UpdateProductCase from "./UpdateProductCase";
 
 @injectable()
