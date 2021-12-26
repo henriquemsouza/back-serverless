@@ -37,7 +37,7 @@ export default class ProductsCase implements UseCase {
     return {
       where: (qb: SelectQueryBuilder<Product>) => {
         qb.leftJoin("Product.category", "category");
-        if (code) qb.where("Product.code = :code", { code });
+        if (code) qb.where("Product.code like :code", { code: `%${code}%` });
         if (id) qb.where("Product.id = :id", { id });
         if (categoryId) qb.where("category_id = :categoryId", { categoryId });
       },
