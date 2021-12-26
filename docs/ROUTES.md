@@ -5,7 +5,7 @@ These are some of the existing routes at the moment.
 ```sh
 
 .-----------------------------------------.
-|             List All Routes             |
+|              All Routes                 |
 |-----------------------------------------|
 | Method |              URI               |
 |--------|--------------------------------|
@@ -58,3 +58,112 @@ curl --location --request GET 'http://localhost:3000/v1/marketplace/products/lis
 ```
 
 
+
+
+#  [GET] Categories list 'v1/marketplace/categories/list'
+
+
+### curl
+```curl
+curl --location --request GET 'http://localhost:3000/v1/marketplace/categories/list'
+
+```
+
+### response:
+
+```json
+{
+    "categories": [
+        {
+            "id": 1,
+            "name": "atacado"
+        },
+
+    ]
+}
+```
+
+
+#  [POST] Create Products 'v1/marketplace/product'
+
+### curl
+```curl
+curl --location --request POST 'http://localhost:3000/v1/marketplace/product' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "code": "XYXY",
+    "categoryId": "44",
+    "name": "NEW NAME"
+}'
+
+```
+
+### Body:
+
+```json
+{
+    "code": "UNIQUE INFORMED CODE",
+    "categoryId": "INFORMED CATEGORY ID",
+    "name": "INFORMED NAME"
+}
+```
+
+### response:
+
+```json
+{
+    "code": "INFORMED CODE",
+    "category": {
+        "id": "INFORMED CATEGORY ID",
+        "name": "INFORMED CATEGORY NAME"
+    },
+    "name": "INFORMED NAME",
+    "id": 28,
+    "createdAt": "2021-12-26T23:03:38.649Z"
+}
+```
+
+
+#  [DELETE] Delete products  'v1/marketplace/product'
+
+### curl
+```curl
+curl --location --request DELETE 'http://localhost:3000/v1/marketplace/product?id=28' \
+--header 'Content-Type: application/json'
+
+```
+
+### response:
+
+```json
+{
+    "OK"
+}
+```
+
+#  [PATCH] Create Products 'v1/marketplace/product'
+
+### Body:
+
+```json
+{
+    "categoryId": "UPDATED CATEGORY ID",
+    "name": "UPDATED NAME",
+    "id": "8"
+}
+```
+
+### response:
+
+```json
+{
+    "code": "INFORMED CODE",
+    "category": {
+        "id": "INFORMED CATEGORY ID",
+        "name": "INFORMED CATEGORY NAME"
+    },
+    "name": "INFORMED NAME",
+    "id": 28,
+    "createdAt": "2021-12-26T23:03:38.649Z"
+}
+```
