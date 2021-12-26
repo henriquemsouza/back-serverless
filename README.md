@@ -1,6 +1,14 @@
 
 # Back Serverless
 
+## Requirements:
+  * [Docker](https://docs.docker.com/engine/installation/)
+
+  * [Docker-compose](https://docs.docker.com/compose/install/)
+
+  * The frontend of this project is in the following repo [repository link](https://github.com/henriquemsouza/front-angular)
+
+
 
 ## Folder Structure (/src) ##
 ```sh
@@ -92,3 +100,21 @@ yarn start:dev
 ```sh
 yarn routes
 ```
+
+## Made with
+
+
+[Typescript](https://www.typescriptlang.org/)
+
+[aws-serverless-express](https://www.npmjs.com/package/aws-serverless-express)
+
+[TypeOrm](https://typeorm.io/#/)
+
+[inversify](https://inversify.io/)
+
+
+## Docs
+
+[CREATE A NEW TABLE](docs/CREATE-NEW-TABLES.md)
+
+[EXISTING ROUTES](docs/ROUTES.md)
