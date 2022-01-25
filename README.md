@@ -101,6 +101,16 @@ yarn start:dev
 yarn routes
 ```
 
+### Initial build with docker on Windows
+```sh
+docker-compose -f docker-compose.win.yml up --build
+```
+
+### Script  not find temp solution 
+```sh
+ sed -i -e 's/\r$//' .\start-win.sh
+ ```
+
 ## Made with
 
 
